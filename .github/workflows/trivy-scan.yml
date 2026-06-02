@@ -23,13 +23,13 @@ jobs:
       run: |
         docker build -t localapp:test .
 
-    - name: Run Trivy Vulnerability Scanner
-      uses: aquasecurity/trivy-action@0.28.0
+    - name: Run Trivy Vulnerability Scanner (SARIF Output)
+      uses: aquasecurity/trivy-action@v0.36.0   # Note the mandatory 'v' prefix
       with:
-        image-ref: 'localapp:test'
-        format: 'sarif'
-        output: 'trivy-results.sarif'
-        severity: 'CRITICAL,HIGH'
+         image-ref: 'local-test-image:${{ github.sha }}'
+         format: 'sarif'
+         output: 'trivy-results.sarif'
+         severity: 'CRITICAL,HIGH'
 
     - name: Upload Scan Results to GitHub Security Tab
       uses: github/codeql-action/upload-sarif@v3
